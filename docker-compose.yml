@@ -1,0 +1,52 @@
+version: "3"
+
+services:
+  database:
+    image: mysql:latest
+    container_name: database-container
+    environment:
+      MYSQL_DATABASE: pokemon-api
+      MYSQL_ROOT_PASSWORD: test1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  app:
+    image: node:18
+    container_name: app-container
+    environment:
+      PORT: 3000
+      DATABASE_URL: mysql://root:test1234@database:3306/pokemon-api
+      JWT_SECRET: pokemon
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+    working_dir: "/app"
+    volumes:
+      - ./app:/app
+    command:
+      - sh
+      - -c
+      - |
+        npm i -g nodemon ts-node &&
+        npm i &&
+        nodemon src/app.ts
+
+  prisma-studio:
+    image: node:18
+    container_name: prisma-studio-container
+    environment:
+      DATABASE_URL: mysql://root:test1234@database:3306/pokemon-api
+    ports:
+      - "5555:5555"
+    depends_on:
+      - database
+    working_dir: "/app"
+    volumes:
+      - ./app:/app
+    command: npx prisma studio
+
+volumes:
+  mysql-data:
