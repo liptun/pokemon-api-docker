@@ -26,9 +26,9 @@ userRouter.post("/user", async (req, res) => {
         res.json(user);
     } catch (e) {
         if (e instanceof PrismaClientKnownRequestError && e.code === "P2002") {
-            res.json({ ...e, message: "This user name is not available" });
+            res.status(409).json({ ...e, message: "This user name is not available" });
         } else {
-            res.json(e);
+            res.status(500).json(e);
         }
     }
 });
@@ -38,8 +38,8 @@ userRouter.delete("/user/:id", async (req, res) => {
     try {
         const id = idSchema.parse(parseInt(req.params.id));
         const user = await prisma.user.delete({ where: { id } });
-        res.json(user);
+        res.status(204).json(user);
     } catch (e) {
-        res.json(e);
+        res.status(500).json(e);
     }
 });

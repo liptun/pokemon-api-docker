@@ -8,6 +8,8 @@ tags:
     - name: Pokemon
     - name: Trainer
     - name: Catch
+    - name: User
+    - name: Auth
 
 paths:
     /pokemon:
@@ -65,6 +67,8 @@ paths:
                 - Trainer
             summary: Create new Trainer
             description: Create new Trainer with provided json payload
+            security:
+                - BearerAuth: []
             requestBody:
                 required: true
                 content:
@@ -96,6 +100,8 @@ paths:
                 - Trainer
             summary: Edit existing Trainer
             description: Edit existing Trainer with provided json payload
+            security:
+                - BearerAuth: []
             requestBody:
                 required: true
                 content:
@@ -141,6 +147,8 @@ paths:
                 - Trainer
             summary: Delete Trainer by id
             description: Delete Trainer by id
+            security:
+                - BearerAuth: []
             parameters:
                 - in: path
                   name: trainerId
@@ -167,6 +175,8 @@ paths:
                 - Catch
             summary: Catch Pokemon by Trainer
             name: Catch Pokemon by Trainer
+            security:
+                - BearerAuth: []
             requestBody:
                 required: true
                 content:
@@ -190,6 +200,8 @@ paths:
                 - Catch
             summary: Edit Catch
             name: Edit Catch
+            security:
+                - BearerAuth: []
             requestBody:
                 required: true
                 content:
@@ -211,14 +223,103 @@ paths:
                 - Catch
             summary: Delete Catch
             name: Delete Catch
+            security:
+                - BearerAuth: []
             parameters:
                 - in: path
                   name: catchId
                   required: true
                   schema:
                       type: integer
+    /user:
+        get:
+            tags:
+                - User
+            summary: Get all users list
+            description: Get all users list
+            responses:
+                200:
+                    $ref: "#/components/responses/User"
+        post:
+            tags:
+                - User
+            summary: Create new user
+            description: Create new user
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                password:
+                                    type: string
+                            required:
+                                - name
+                                - password
+            responses:
+                200:
+                    $ref: "#/components/responses/UserCreate"
+                409:
+                    $ref: "#/components/responses/UserCreateConflict"
+    /user/{userId}:
+        delete:
+            tags:
+                - User
+            summary: Delete user by id
+            description: Delete user by id
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                204:
+                    description: Deleted succesfully
+                    content:
+                        application/json:
+                            example:
+    /authorize:
+        post:
+            tags:
+                - Auth
+            summary: Authorize user
+            description: Authorize user and retrieve JWT
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                password:
+                                    type: string
+                            required:
+                                - name
+                                - password
+            responses:
+                200:
+                    description: Authorize succesfully
+                    content:
+                        text/html:
+                            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiTGlwdHVOIiwiaWQiOjE0LCJpYXQiOjE3MDY0NDI2NjksImV4cCI6MTcwNjQ0NjI2OX0.rn5u6_Rfhj3SNKq7hwaBjMAXa0dfHiDkw_myeKlS-wE%
+                401:
+                    description: Incorrect credentials
+                    content:
+                        application/json:
+                            example:
+                                error: user not found
 
 components:
+    securitySchemes:
+        BearerAuth:
+            type: http
+            scheme: bearer
     responses:
         BadRequest:
             description: Bad Request
@@ -288,3 +389,26 @@ components:
                               name_jp: "ディグダ"
                               species: "Mole Pokémon"
                               description: "Around their crops, farmers plant the kind of tree that Diglett like to eat as a way of getting Diglett to plow the fields for them."
+        UserCreate:
+            description: Succesfull response
+            content:
+                application/json:
+                    example:
+                        - id: 1
+                          name: LiptuN
+                          password: 937e8d5fbb48bd4949536cd65b8d35c426b80d2f830c5c308e2cdec422ae2244
+        UserCreateConflict:
+            description: Error response
+            content:
+                application/json:
+                    example:
+                        - message: This user name is not available
+        User:
+            description: Succesfull response
+            content:
+                application/json:
+                    example:
+                        - id: 1
+                          name: LiptuN
+                        - no: 2
+                          name: doenutt

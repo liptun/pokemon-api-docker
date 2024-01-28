@@ -19,13 +19,15 @@ authorizeRouter.post("/authorize", async (req, res) => {
         const user = await prisma.user.findFirst({ where: { name: validatePayload.name } });
 
         if (user === null) {
-            res.json({ error: "user not found" }).status(401);
+            res.status(401).json({ error: "user not found" });
             return;
         }
 
         if (user?.password === sha256(validatePayload.password)) {
             const token = jwt.sign({ name: user.name, id: user.id }, process.env.JWT_SECRET ?? "", { expiresIn: "1h" });
             res.send(token);
+        } else {
+            res.status(401).send({ error: "incorrect password" });
         }
     } catch (e) {
         res.json(e);

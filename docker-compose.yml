@@ -32,7 +32,7 @@ services:
       - |
         npm i -g nodemon ts-node &&
         npm i &&
-        nodemon src/app.ts
+        nodemon --watch ./src --ext ts,yaml ./src/app.ts
 
   prisma-studio:
     image: node:18
