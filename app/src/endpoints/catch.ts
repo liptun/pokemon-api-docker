@@ -61,12 +61,12 @@ catchRouter.patch("/catch", authMiddleware, async (req, res) => {
         const validatePayload = payloadSchema.parse(req.body);
         const { id } = validatePayload;
 
-        const deletedCatch = await prisma.catchedPokemon.update({
+        const updatedCatch = await prisma.catchedPokemon.update({
             where: { id },
             data: { ...validatePayload, id: undefined },
         });
         res.status(200);
-        res.json(deletedCatch);
+        res.json(updatedCatch);
     } catch (e) {
         res.status(400);
         res.json(e);

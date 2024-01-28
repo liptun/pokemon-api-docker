@@ -93,6 +93,31 @@ trainerRouter.post("/trainer", authMiddleware, async (req, res) => {
     }
 });
 
+trainerRouter.patch("/trainer", authMiddleware, async (req, res) => {
+    const payloadSchema = z
+        .object({
+            id: z.number(),
+            name: z.string().optional(),
+            name_jp: z.string().optional(),
+        })
+        .strict();
+
+    try {
+        const validatePayload = payloadSchema.parse(req.body);
+        const { id } = validatePayload;
+
+        const updatedTrainer = await prisma.trainer.update({
+            where: { id },
+            data: { ...validatePayload, id: undefined },
+        });
+        res.status(200);
+        res.json(updatedTrainer);
+    } catch (e) {
+        res.status(400);
+        res.json(e);
+    }
+});
+
 trainerRouter.delete("/trainer/:id", authMiddleware, async (req, res) => {
     const idSchema = z.number();
 
