@@ -11,6 +11,7 @@ import { catchRouter } from "./endpoints/catch";
 import { parse } from "yaml";
 import { userRouter } from "./endpoints/user";
 import { authorizeRouter } from "./endpoints/authorize";
+import { homeRouter } from "./endpoints/home";
 
 const file = fs.readFileSync(path.join(__dirname, "swagger.yaml"), "utf8");
 
@@ -39,6 +40,7 @@ app.use(userRouter);
 app.use(pokemonRouter);
 app.use(trainerRouter);
 app.use(catchRouter);
+app.use(homeRouter);
 
 app.all("*", (_, res) => {
     res.json({
