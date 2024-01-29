@@ -29,4 +29,4 @@ by requesting list of pokemons. For example with curl.
 ```shell
 $ curl localhost:3000/pokemon
 ```
-If setuped correctly You should receive list of first 10 pokemons from pokedex.
+If setup correctly You should receive list of first 10 pokemons from pokedex.
