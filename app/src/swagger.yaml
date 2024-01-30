@@ -115,9 +115,8 @@ paths:
                                     type: string
                                 name_jp:
                                     type: string
-            required:
-                - id
-
+                            required:
+                                - id
             responses:
                 400:
                     $ref: "#/components/responses/BadRequest"
