@@ -23,16 +23,12 @@ services:
       - "3000:3000"
     depends_on:
       - database
-    working_dir: "/app"
+    working_dir: "/"
     volumes:
       - ./app:/app
-    command:
-      - sh
-      - -c
-      - |
-        npm i -g nodemon ts-node &&
-        npm i &&
-        nodemon --watch ./src --ext ts,yaml ./src/app.ts
+      - ./entrypoint.sh:/entrypoint.sh
+      - mysql-data:/database
+    entrypoint: /entrypoint.sh
 
   prisma-studio:
     image: node:18
