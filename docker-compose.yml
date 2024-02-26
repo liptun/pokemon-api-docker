@@ -11,6 +11,12 @@ services:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -hlocalhost -uroot -p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 3s
 
   app:
     image: node:18
@@ -22,7 +28,8 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     working_dir: "/"
     volumes:
       - ./app:/app
@@ -38,7 +45,8 @@ services:
     ports:
       - "5555:5555"
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     working_dir: "/app"
     volumes:
       - ./app:/app
