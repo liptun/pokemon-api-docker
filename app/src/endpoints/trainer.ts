@@ -1,7 +1,7 @@
 import express from "express";
-import { prisma } from "../app";
 import z from "zod";
-import { authMiddleware } from "../utils";
+import { prisma } from "src/app";
+import { authMiddleware } from "src/utils";
 
 export const trainerRouter = express.Router();
 
@@ -53,7 +53,7 @@ trainerRouter.get("/trainer/:id", async (req, res) => {
 });
 
 trainerRouter.get("/trainer", async (req, res) => {
-    const limit = req.query.limit?.toString() || "10";
+    const limit = req.query.limit?.toString() ?? "10";
 
     try {
         const trainers = await prisma.trainer.findMany({

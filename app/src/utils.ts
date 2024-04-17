@@ -1,12 +1,12 @@
-import jwt, { JsonWebTokenError, JwtPayload, TokenExpiredError } from "jsonwebtoken";
-import { Request, RequestHandler } from "express";
+import jwt, { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
+import { RequestHandler } from "express";
 import * as crypto from "crypto";
 import z from "zod";
 
 export const sha256 = (input: string): string => crypto.createHash("sha256").update(input, "utf-8").digest("hex");
 
 class TokenError extends Error {
-    constructor(message: string) {
+    public constructor(message: string) {
         super(message);
         this.name = "BearerTokenError";
     }
@@ -18,6 +18,7 @@ export type AuthMiddlewareLocals = {
     user: User;
 };
 
+// eslint-disable-next-line
 type AuthorizationRequestHandler = RequestHandler<any, any, any, any, AuthMiddlewareLocals>;
 
 export const authMiddleware: AuthorizationRequestHandler = (req, res, next) => {
@@ -25,7 +26,7 @@ export const authMiddleware: AuthorizationRequestHandler = (req, res, next) => {
     try {
         if (authHeader !== undefined && authHeader.startsWith("Bearer ")) {
             const tokenSchema = z.tuple([z.literal("Bearer"), z.string()]);
-            const [_, token] = tokenSchema.parse(authHeader.split(" "));
+            const [, token] = tokenSchema.parse(authHeader.split(" "));
             const decoded = jwt.verify(token, process.env.JWT_SECRET ?? "");
             const validated = userSchema.parse(decoded);
             res.locals.user = validated;

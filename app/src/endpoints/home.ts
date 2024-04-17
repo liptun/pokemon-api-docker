@@ -6,7 +6,7 @@ homeRouter.get("/", async (req, res) => {
     const baseUrl = `${req.protocol}://${req.hostname}`;
     const port = req.socket.localPort;
 
-    const apiUrl = `${baseUrl}${port && `:${port}`}`;
+    const apiUrl = `${baseUrl}${port ?? `:${port}`}`;
     const prismaStudio = `${baseUrl}:5555`;
 
     res.json({

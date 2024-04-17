@@ -1,7 +1,7 @@
 import { Router } from "express";
 import z from "zod";
-import { prisma } from "../app";
-import { sha256 } from "../utils";
+import { prisma } from "src/app";
+import { sha256 } from "src/utils";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 export const userRouter = Router();

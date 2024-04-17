@@ -1,5 +1,5 @@
 import express from "express";
-import { prisma } from "../app";
+import { prisma } from "src/app";
 import z from "zod";
 
 export const pokemonRouter = express.Router();
@@ -23,7 +23,7 @@ pokemonRouter.get("/pokemon/:id", async (req, res) => {
 });
 
 pokemonRouter.get("/pokemon", async (req, res) => {
-    const limit = req.query.limit?.toString() || "10";
+    const limit = req.query.limit?.toString() ?? "10";
 
     try {
         const pokemons = await prisma.pokemon.findMany({

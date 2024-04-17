@@ -1,7 +1,7 @@
 import express from "express";
 import z from "zod";
-import { prisma } from "../app";
-import { authMiddleware } from "../utils";
+import { prisma } from "src/app";
+import { authMiddleware } from "src/utils";
 
 export const catchRouter = express.Router();
 
