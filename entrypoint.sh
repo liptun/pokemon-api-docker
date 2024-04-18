@@ -15,5 +15,3 @@ else
 fi
 
 npm run dev
-#npm i -g nodemon ts-node && npm i && nodemon --watch ./src --ext ts,yaml ./src/app.ts
-
