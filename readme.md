@@ -11,12 +11,6 @@ Run docker compose in root directory
 ```shell
 docker-compose up -d
 ```
-### Initialize database
-Exec those command in app-container
-```shell
-npx prisma migrate dev
-npx prisma db seed
-```
 
 ## Usage
 - API is available under localhost:3000
