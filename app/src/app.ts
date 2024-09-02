@@ -43,9 +43,10 @@ app.use(catchRouter);
 app.use(homeRouter);
 
 app.all("*", (_, res) => {
+    res.status(404);
     res.json({
         error: "endpoint don't exists",
-    }).status(404);
+    });
 });
 
 app.listen(port, () => console.log(`Server is listening on ${port}`));
